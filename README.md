@@ -14,15 +14,15 @@ An umbrella repository containing submodules to each individual repository conce
 
 ## Overview
 
-[Active Development] [Phi Kappa Sigma Delta Phi Website](https://github.com/JasonYao/SkullhouseNYU)
+[Active Development] [Yao Global Website](https://github.com/JasonYao/Yao-Global)
 
-[Active Development] [Bobst Library Room Reservation](https://github.com/JasonYao/NYU-Bobst-Library-Reservation-Automator-Java)
+[Active Development] [Yao Foundation Website](https://github.com/JasonYao/Yao-Foundation)
 
 ## Setup
 
 Initial download & submodule setup:
 
-`git clone --recursive https://www.github.com/JasonYao/Phi-Kappa-Sigma.git`
+`git clone --recursive https://www.github.com/JasonYao/Yao-Server.git`
 
 Update all submodules to their latest respective HEADs
 
