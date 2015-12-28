@@ -1,0 +1,6 @@
+[submodule "web/YaoGlobal"]
+	path = web/YaoGlobal
+	url = https://github.com/JasonYao/Yao-Global
+[submodule "web/YaoFoundation"]
+	path = web/YaoFoundation
+	url = https://github.com/JasonYao/Yao-Foundation
