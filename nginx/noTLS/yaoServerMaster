@@ -1,0 +1,128 @@
+##############
+# Yao Server #
+##############
+
+###############################################################
+# Server Redirect from HTTP to HTTPS, and uses "www." for SEO #
+###############################################################
+server {
+	listen 80;
+	server_name jasonyao.net;
+	root /usr/share/nginx/html;
+	index jasonyao.html;
+	location / {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        try_files $uri $uri/ =404;
+    }
+}
+
+server {
+	listen 80 default_server;
+	listen [::]:80 ipv6only=on;
+#	listen 443 ssl http2 default_server;
+#	listen [::]:443 ssl http2 ipv6only=on;
+
+## Stuff to delete after LE is done verifying
+index yaoGlobal.html;
+root /usr/share/nginx/html;
+location / {
+		# First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+		try_files $uri $uri/ =404;
+	}
+
+	
+	server_name yao.global;
+
+#	return 301 https://www.yao.global$request_uri;
+}
+
+server {
+	listen 80;
+#	listen 443 ssl http2;
+	
+## Stuff to delete after LE is done verifying
+index yaoFoundation.html;
+root /usr/share/nginx/html;
+location / {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        try_files $uri $uri/ =404;
+    }
+
+
+	server_name yao.foundation;
+
+#	return 301 https://www.yao.foundation$request_uri;
+}
+
+##########################
+# Yao Global TLS Servers #
+##########################
+server {
+	listen 443 ssl http2;
+	listen [::]:443 ssl http2;
+
+#	root /;
+#	index index.html;
+
+	server_name www.yao.global;
+
+	##### Implements Caching #####
+	location ~* .(png|ico|css|js|jpg|gif)$ {expires 1M;}
+
+	# Serves static files from the finder application
+	location /static/ {
+        root /server/web/YaoGlobal;
+    }
+
+	location /media/ {
+		root /server/web/YaoGlobal;
+	}
+
+	# Actually serves through the uwsgi protocol via a unix socket
+	location / {
+		include         uwsgi_params;
+		# Sets the socket to a unix socket (default, faster)
+        uwsgi_pass      unix:///finder/web/finder/finder.sock;
+
+		# Sets the socket to a websocket (slower, but backup if sockets fuck up)
+#		uwsgi_pass	127.0.0.1:3031;
+    }
+} ##### End of the Yao Global TLS Server Block #####
+
+##############################
+# Yao Foundation TLS Servers #
+##############################
+server {
+	listen 443 ssl http2;
+	listen [::]:443 ssl http2;
+
+#	root /;
+#	index index.html;
+
+	server_name www.yao.foundation;
+
+	##### Implements Caching #####
+	location ~* .(png|ico|css|js|jpg|gif)$ {expires 1M;}
+
+	# Serves static files from the finder application
+	location /static/ {
+        root /server/web/YaoFoundation;
+    }
+
+	location /media/ {
+		root /server/web/YaoFoundation;
+	}
+
+	# Actually serves through the uwsgi protocol via a unix socket
+	location / {
+		include         uwsgi_params;
+		# Sets the socket to a unix socket (default, faster)
+        uwsgi_pass      unix:///finder/web/finder/finder.sock;
+
+		# Sets the socket to a websocket (slower, but backup if sockets fuck up)
+#		uwsgi_pass	127.0.0.1:3031;
+    }
+} ##### End of the Yao Global TLS Server Block #####
