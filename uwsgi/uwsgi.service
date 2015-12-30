@@ -1,0 +1,10 @@
+[Service]
+ExecStart=/home/jason/Env/server/bin/uwsgi --emperor /server/uwsgi/sites/ --master --uid www-data --gid www-data --logto /var/log/uwsgi/emperor.log
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
+
