@@ -6,24 +6,46 @@
 # Server Redirect from HTTP to HTTPS, and uses "www." for SEO #
 ###############################################################
 server {
+	listen 80;
+	listen 443 ssl http2;
+
+	# TLS for jasonyao.net:
+	ssl_certificate /etc/letsencrypt/live/jasonyao.net/fullchain.pem; # TLS certs based off of LE
+	ssl_certificate_key /etc/letsencrypt/live/jasonyao.net/privkey.pem; # TLS certs based off of LE
+
+	server_name jasonyao.net www.jasonyao.net;
+	return 301 https://jason.yao.global$request_uri;
+}
+
+server {
 	listen 80 default_server;
 	listen [::]:80 ipv6only=on;
 	listen 443 ssl http2 default_server;
 	listen [::]:443 ssl http2 ipv6only=on;
-	
-	server_name yao.global;
 
+	# TLS for yao.global:
+	ssl_certificate /etc/letsencrypt/live/yao.global/fullchain.pem; # TLS certs based off of LE
+	ssl_certificate_key /etc/letsencrypt/live/yao.global/privkey.pem; # TLS certs based off of LE
+
+	server_name yao.global;
 	return 301 https://www.yao.global$request_uri;
 }
 
 server {
 	listen 80;
-	listen [::]:80 ipv6only=on;
 	listen 443 ssl http2;
-	listen [::]:443 ssl http2 ipv6only=on;
 	
-	server_name yao.foundation;
+	# TLS for yao.foundation:
+	ssl_certificate /etc/letsencrypt/live/yao.foundation/fullchain.pem; # TLS certs based off of LE
+	ssl_certificate_key /etc/letsencrypt/live/yao.foundation/privkey.pem; # TLS certs based off of LE
 
+	server_name yao.foundation;
+	return 301 https://www.yao.foundation$request_uri;
+}
+
+server {
+	listen 80;
+	server_name www.yao.foundation;
 	return 301 https://www.yao.foundation$request_uri;
 }
 
@@ -34,10 +56,11 @@ server {
 	listen 443 ssl http2;
 	listen [::]:443 ssl http2;
 
-#	root /;
-#	index index.html;
+	# TLS for yao.global
+	ssl_certificate /etc/letsencrypt/live/yao.global/fullchain.pem; # TLS certs based off of LE
+	ssl_certificate_key /etc/letsencrypt/live/yao.global/privkey.pem; # TLS certs based off of LE
 
-	server_name www.yao.global;
+	server_name www.yao.global jason.yao.global michael.yao.global george.yao.global;
 
 	##### Implements Caching #####
 	location ~* .(png|ico|css|js|jpg|gif)$ {expires 1M;}
@@ -47,15 +70,11 @@ server {
         root /server/web/YaoGlobal;
     }
 
-	location /media/ {
-		root /server/web/YaoGlobal;
-	}
-
 	# Actually serves through the uwsgi protocol via a unix socket
 	location / {
 		include         uwsgi_params;
 		# Sets the socket to a unix socket (default, faster)
-        uwsgi_pass      unix:///finder/web/finder/finder.sock;
+		uwsgi_pass	unix:///tmp/uwsgi/YaoGlobal.sock;
 
 		# Sets the socket to a websocket (slower, but backup if sockets fuck up)
 #		uwsgi_pass	127.0.0.1:3031;
@@ -69,8 +88,9 @@ server {
 	listen 443 ssl http2;
 	listen [::]:443 ssl http2;
 
-#	root /;
-#	index index.html;
+	# TLS for yao.foundation:
+	ssl_certificate /etc/letsencrypt/live/yao.foundation/fullchain.pem; # TLS certs based off of LE
+	ssl_certificate_key /etc/letsencrypt/live/yao.foundation/privkey.pem; # TLS certs based off of LE
 
 	server_name www.yao.foundation;
 
@@ -82,15 +102,11 @@ server {
         root /server/web/YaoFoundation;
     }
 
-	location /media/ {
-		root /server/web/YaoFoundation;
-	}
-
 	# Actually serves through the uwsgi protocol via a unix socket
 	location / {
 		include         uwsgi_params;
 		# Sets the socket to a unix socket (default, faster)
-        uwsgi_pass      unix:///finder/web/finder/finder.sock;
+		uwsgi_pass  unix:///tmp/uwsgi/YaoFoundation.sock;
 
 		# Sets the socket to a websocket (slower, but backup if sockets fuck up)
 #		uwsgi_pass	127.0.0.1:3031;
