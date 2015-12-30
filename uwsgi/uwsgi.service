@@ -1,4 +1,5 @@
 [Service]
+ExecStartPre=-/bin/bash -c 'mkdir -p /tmp/uwsgi; chown www-data:www-data /tmp/uwsgi'
 ExecStart=/home/jason/Env/server/bin/uwsgi --emperor /server/uwsgi/sites/ --master --uid www-data --gid www-data --logto /var/log/uwsgi/emperor.log
 Restart=always
 KillSignal=SIGQUIT
