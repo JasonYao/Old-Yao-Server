@@ -61,14 +61,15 @@ server {
 	ssl_certificate_key /etc/letsencrypt/live/yao.global/privkey.pem; # TLS certs based off of LE
 
 	server_name www.yao.global jason.yao.global michael.yao.global george.yao.global;
+	root /server/web/YaoGlobal; # My gut says that this shouldn't be correct, since /static regex should fall into the static location block anyways, but oh well
 
 	##### Implements Caching #####
 	location ~* .(png|ico|css|js|jpg|gif)$ {expires 1M;}
 
-	# Serves static files from the finder application
-	location /static/ {
-        root /server/web/YaoGlobal;
-    }
+	# Serves static files for the Yao Global application
+	location /static {
+		root /server/web/YaoGlobal;
+	}
 
 	# Actually serves through the uwsgi protocol via a unix socket
 	location / {
@@ -93,12 +94,13 @@ server {
 	ssl_certificate_key /etc/letsencrypt/live/yao.foundation/privkey.pem; # TLS certs based off of LE
 
 	server_name www.yao.foundation;
+	root /server/web/YaoFoundation;
 
 	##### Implements Caching #####
 	location ~* .(png|ico|css|js|jpg|gif)$ {expires 1M;}
 
-	# Serves static files from the finder application
-	location /static/ {
+	# Serves static files for the Yao Foundation application
+	location /static {
         root /server/web/YaoFoundation;
     }
 
