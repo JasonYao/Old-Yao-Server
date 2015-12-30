@@ -1,0 +1,30 @@
+[Unit]
+Description=Minecraft Server
+Documentation=
+
+Wants=network.target
+After=network.target
+
+[Service]
+User=minecraft
+Group=minecraft
+Nice=5
+
+# Timeout for start up/shut down
+TimeoutSec=300
+Type=simple
+NotifyAccess=all
+
+ProtectHome=true
+ProtectSystem=full
+PrivateDevices=true
+NoNewPrivileges=true
+PrivateTmp=true
+InaccessibleDirectories=/root /home /server/web /server/nginx /server/uwsgi /server/letsEncrypt /lost+found /media /opt
+ReadWriteDirectories=/minecraft
+WorkingDirectory=/minecraft
+
+ExecStart=/server/minecraft/start
+
+[Install]
+WantedBy=multi-user.target

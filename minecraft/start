@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# Starts a minecraft server, is run by the minecraft service managed by systemd
+/usr/bin/java -Xmx1400M -Xms1024M -jar /minecraft/minecraft_server.1.8.9.jar nogui -d64
